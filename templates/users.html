@@ -1,0 +1,191 @@
+{% extends "__base.html" %}
+{% load static %}
+{% block navbar-top %}
+<nav class="navbar-top">
+    <img src="{% static 'img/menu-bar.png' %}" class="menu" alt="menu">
+    <div class="nav-center">
+        <div class="toogle">
+            <a href="{% url 'main:index' %}"><img src="{% static 'img/home.svg' %}" alt="home"></a>
+            <img src="{% static 'img/line.png' %}" alt="line">
+            <a href="{% url 'main:index' %}">Asosiy</a>
+            <img src="{% static 'img/line.png' %}" alt="line">
+            <a href="{% url 'main:table' %}">Xodimlar</a>
+
+        </div>
+
+        <div class="box-user">
+            <img src="{% static 'img/user.svg' %}" alt="user">
+            <span>|</span>
+            <p>{{ user.full_name }}</p>
+        </div>
+    </div>
+</nav>
+{% endblock navbar-top %}
+{% block content %}
+
+<div class="modal {% if not messages %}fade{% endif %}" id="exampleModal" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-custom-dark text-light">
+            <form method="post" id="id_form">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Xodim qo'shish</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="{{ form.first_name.id_for_label }}" class="form-label">Ismi</label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                            <div class="text-danger small">
+                                {{ form.first_name.errors|striptags }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col">
+                            <label for="{{ form.last_name.id_for_label }}" class="form-label">Familyasi</label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                            <div class="text-danger small">
+                                {{ form.last_name.errors|striptags }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="{{ form.phone_number.id_for_label }}" class="form-label">Telefon raqami</label>
+                            {{ form.phone_number }}
+                            {% if form.phone_number.errors %}
+                            <div class="text-danger small">
+                                {{ form.phone_number.errors|striptags }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="{{ form.lavel.id_for_label }}" class="form-label">Lavozimi</label>
+                            {{ form.lavel }}
+                            {% if form.lavel.errors %}
+                            <div class="text-danger small">
+                                {{ form.lavel.errors|striptags }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="{{ form.username.id_for_label }}" class="form-label">Foydalanuvchi nomi</label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                            <div class="text-danger small">
+                                {{ form.username.errors|striptags }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col">
+                            <label for="{{ form.password.id_for_label }}" class="form-label">Paroli</label>
+                            {{ form.password }}
+                            {% if form.password.errors %}
+                            <div class="text-danger small">
+                                {{ form.password.errors|striptags }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-bs-dismiss="modal" >Bekor qilish</button>
+                    <button type="submit">Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="ms-auto">
+
+        <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            + | Xodim qo'shish
+        </button>
+    </div>
+</div>
+
+<h2 class="mt-5">Foydalanuvchilar Ro'yxati</h2>
+
+
+<form class="d-flex" role="search" method='get'>
+    <input class="form-control search-input"  placeholder="Foydalanuvchini qidiring" type="search" value="{{ request.GET.search }}" aria-label="Search">
+    <button class="btn btn-outline-primary search-btn" type="submit">Search</button>
+</form>
+
+<!-- Foydalanuvchilar jadvali -->
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Ism</th>
+            <th>Foydalanuvchi</th>
+            <th>Lavozimi</th>
+            <th>Telefon</th>
+            <th>Taxrirlash/O'chirish</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ user.full_name }}</td>
+            <td>
+                {% if user.is_superuser %}
+                    Admin
+                {% else %}
+                    Foydalanuvchi
+                {% endif %}
+            </td>
+            <td>{{ user.lavel }}</td>
+            <td>{{ user.phone_number }}</td>
+            <td>
+                <a href="{% url 'main:update_user' user.pk %}" class="btn btn-outline-success green">Tahrirlash</a>
+                <a href="{% url 'main:delete_user' user.pk %}" class="btn btn-outline-danger red" 
+                onclick="return confirm('Ushbu Foydalanuvchini o‘chirishni xohlaysizmi?');">O'chirish</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">Foydalanuvchilar mavjud emas.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+
+{% endblock content %}
+{% block js %}
+document.addEventListener('DOMContentLoaded', function () {
+    const modalElement = document.getElementById('exampleModal');
+    const bootstrapModal = new bootstrap.Modal(modalElement);
+
+    if (
+      modalElement &&
+      (modalElement.querySelector('.alert') || modalElement.querySelector('.text-danger'))
+    ) {
+      bootstrapModal.show();  
+    }
+
+    const formElement = document.getElementById('id_form');
+
+    if (formElement) {
+      modalElement.addEventListener('hidden.bs.modal', function () {
+        
+        var loc = window.location;
+        window.location = loc.protocol + '//' + loc.host + loc.pathname + loc.search;
+      });
+    }
+  });
+{% endblock js %}

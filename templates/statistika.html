@@ -1,0 +1,96 @@
+{% extends "__base.html" %}
+{% load static %}
+{% block navbar-top %}
+  <nav class="navbar-top">
+      <img src="{% static 'img/menu-bar.png' %}" class="menu" alt="menu">
+      <div class="nav-center">
+          <div class="toogle">
+              <a href="{% url 'main:index' %}"><img src="{% static 'img/home.svg' %}" alt="home"></a>
+              <img src="{% static 'img/line.png' %}" alt="line">
+              <a href="{% url 'main:index' %}">Asosiy</a>
+              <img src="{% static 'img/line.png' %}" alt="line">
+              <a href="{% url 'main:statistika' %}">Statistika</a>
+              
+          </div>
+
+          {% if request.user.is_superuser %}
+          <a href="{% url 'main:users' %}" class="box-user">
+              <img src="{% static 'img/user.svg' %}" alt="user">
+              <span>|</span>
+              <p>{{ user.full_name }}</p>
+          </a>
+          {% else %}
+          <a href="#" class="box-user">
+              <img src="{% static 'img/user.svg' %}" alt="user">
+              <span>|</span>
+              <p>{{ user.full_name }}</p>
+          </a>
+          {% endif %}
+      </div>
+  </nav>
+{% endblock navbar-top %}
+{% block content %}
+
+    <h2>Qurilma Statistikasi</h2>
+    <p>Joriy vaqt: {{ times|date }}</p>
+    
+    <div id='myDiv'></div>
+
+
+    <p class="yuqolganlar_soni">{{ user_device_count }}</p>
+    <p class="qopilganlar_soni">{{ found_device_count }}</p>
+
+  
+  
+{% endblock content %}
+
+
+{% block js %}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Get the innerHTML values from the p tags with their class names
+  const userDeviceCount = parseInt(document.querySelector('.yuqolganlar_soni').innerHTML.trim());
+  const foundDeviceCount = parseInt(document.querySelector('.qopilganlar_soni').innerHTML.trim());
+
+  console.log(foundDeviceCount)
+
+  // Define the traces for the chart using the dynamic values
+  var trace1 = {
+    x: ['Yo\'qolgan'],
+    y: [userDeviceCount],
+    type: 'bar',
+    name: "Yo'qolgan qurilmalar",
+    marker: {
+      color: 'rgb(49,130,189)',
+      opacity: 0.7,
+    }
+  };
+
+  var trace2 = {
+    x: ["Topilgan"],
+    y: [foundDeviceCount],
+    type: 'bar',
+    name: 'Topilgan qurilmalar',
+    marker: {
+      color: 'rgb(48, 173, 121)',
+      opacity: 0.5
+    }
+  };
+
+  var data = [trace1, trace2];
+
+  var layout = {
+    title: {
+      text: '2024-yil Statistikasi'
+    },
+    xaxis: {
+      tickangle: -45
+    },
+    barmode: 'group'
+  };
+
+  // Render the chart
+  Plotly.newPlot('myDiv', data, layout);
+});
+
+{% endblock js %}

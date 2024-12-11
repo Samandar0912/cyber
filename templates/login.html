@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- my css -->
+    <link rel="stylesheet" href="{% static 'style/login.css' %}">
+    <link rel="stylesheet" href="{% static 'style/respons.css' %}">
+
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="{% static 'style/boot.css' %}">
+    
+     <title>Login</title>
+</head>
+<body>
+    
+
+    <section class="login" id="login">
+        <div class="row">
+            <div class="col empty"></div>
+            <div class="col login-box">
+                <form method="post" action="{% url 'main:login' %}">
+                    {% csrf_token %}
+                    <h1>Tizimga Kirish</h1>
+                    <div class="box-input">
+                        <img src="{% static 'img/user.svg' %}" alt="login">
+                        <span>|</span>
+                        <input type="text" placeholder="Login" name='username' required>
+                    </div>
+                    <div class="box-input">
+                        <img src="{% static 'img/password.svg' %}" alt="pass">
+                        <span>|</span>
+                        <input type="password" placeholder="Password" name='password' required>
+                    </div>
+                    <div>
+                        <button type="submit" id="liveAlertBtn">
+                            <img src="{% static 'img/check.svg' %}" alt="chack">
+                            <span>|</span>
+                            Kirish
+                        </button>
+                        
+                        <ul>
+                            <li>Bog'lanish uchun Raqam: +998 72-123-45-67</li>
+                        </ul>
+
+
+                        {% if messages %}
+                        <ul>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    
+    
+    <!-- bootstrap js -->
+    <script src="{% static 'script/boot.js' %}"></script>
+    <!-- my js -->
+    <script src="{% static 'script/main.js' %}"></script>
+</body>
+</html>

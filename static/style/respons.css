@@ -1,0 +1,188 @@
+@media screen and (max-width: 1024px) {  
+    
+    .toogle{   
+        min-width: auto !important;
+        padding: 0 10px !important;
+    }
+    .toogle a{   
+        font-size: 16px !important;
+    }
+
+    .close{
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .box-user{
+        min-width: auto !important;
+    }
+
+    .box-user p{
+        min-width: auto !important;
+        font-size: 16px !important;
+    }
+
+
+    .navbar-left-ul-1{
+        margin-top: 0px !important;
+    }
+    
+
+  
+    .right {
+        width: auto !important;
+        background: #0b1c34b4;
+        margin-top: 10px;
+        margin-left: 10px;
+        height: auto;
+    }
+
+  
+}
+
+@media screen and (max-width: 992px) {  
+    
+    .empty{
+        display: none;
+    }
+
+    .login{
+        height: 100vh;
+    }
+    .login-box{
+        height: 100vh;
+    }
+
+
+    .toogle{   
+        min-width: auto !important;
+        padding: 0 10px !important;
+    }
+
+
+    .box-user{
+        min-width: auto !important;
+    }
+
+
+    .navbar-left-ul-1{
+        margin-top: 0px 35px !important;
+    }
+
+    .menu{
+        width: 38px !important;
+        height: 38px !important;
+    }
+
+    #add_imei{
+        width: auto !important;
+        margin-left: 40px !important; 
+    }
+
+    .form-container {
+        padding: 0 !important;
+    }
+    .navbar-top {
+        padding: 0 35px !important;
+    }
+    .nav-center {
+    display: flex;
+    justify-content: space-between !important;
+}
+
+    .right {
+        width: auto !important;
+        background: #0b1c34b4;
+        margin-top: 10px;
+        margin-left: 10px;
+        height: auto;
+    }
+
+  
+}
+
+
+@media screen and (max-width: 768px) {  
+    
+    .toogle{   
+        min-width: auto !important;
+        padding: 0 10px !important;
+        margin-left: 30px !important;
+    }
+    .toogle a{   
+        font-size: 16px !important;
+    }
+
+
+    .box-user{
+        display: none ;
+        min-width: auto !important;
+    }
+
+    .close{
+        width: 35px !important; 
+    }
+    .menu{ 
+        margin-left: 10px !important; 
+        width: 35px !important; 
+        height: 35px !important;
+    }
+
+    .navbar-left-ul-1{
+        margin-top: 0px !important;
+    }
+    
+
+    .navbar-top {
+        padding: 0 35px !important;
+      
+    }
+
+    .right {
+        width: auto !important;
+        background: #0b1c34b4;
+        margin-top: 10px;
+        margin-left: 10px;
+        height: auto;
+    }
+
+  
+}
+
+@media screen and (max-width: 576px) {  
+    
+    .navbar-left{
+        display: none;
+    }
+
+    .toogle{   
+        min-width: auto !important;
+        padding: 0 10px !important;
+    }
+
+
+    .box-user{
+        display: none ;
+        min-width: auto !important;
+    }
+
+
+    .navbar-left-ul-1{
+        margin-top: -300px;
+    }
+    
+
+    .navbar-top {
+        padding: 0 !important;
+    }
+
+    .right {
+        width: auto !important;
+        background: #0b1c34b4;
+        margin-top: 10px;
+        margin-left: 10px;
+        height: auto;
+    }
+
+  
+}

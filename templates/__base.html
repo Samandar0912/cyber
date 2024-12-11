@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- my css -->
+    <link rel="stylesheet" href="{% static 'style/main.css' %}">
+    <link rel="stylesheet" href="{% static 'style/respons.css' %}">
+
+    <script src="{% static 'script/chart.js' %}"></script>
+    <script src='https://cdn.plot.ly/plotly-2.35.2.min.js'></script>
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="{% static 'style/boot.css' %}">
+    <script src="{% static 'script/chart.js' %}"></script>
+    <title>Cyber</title>
+
+</head>
+<body>
+
+    
+    <section class="main" id="main">
+        <div class="main-card">
+            {% include "__navbar-left.html" %}
+            <div class="box-center">
+                <div class="left">
+                    {% block navbar-top %}{% endblock navbar-top %}
+                </div>
+                <div class="right">
+                    {% if messages %}
+                        {% for message in messages %}
+
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Diqqat !</strong> {{ message }}
+                            <a type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
+                        </div>
+
+                        {% endfor %}
+                    {% endif %}
+
+                    {% block content %}{% endblock content %}
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <script>{% block js %}{% endblock js %}</script>
+    <!-- bootstrap js -->
+    <script src="{% static 'script/boot.js' %}"></script>
+    <!-- my js -->
+    <script src="{% static 'script/main.js' %}"></script>
+</body>
+</html>

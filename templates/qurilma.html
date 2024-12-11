@@ -1,0 +1,224 @@
+{% extends "__base.html" %}
+{% load static %}
+{% block navbar-top %}
+<nav class="navbar-top">
+    <img src="{% static 'img/menu-bar.png' %}" class="menu" alt="menu">
+    <div class="nav-center">
+         <div class="toogle">
+             <a href="{% url 'main:index' %}"><img src="{% static 'img/home.svg' %}" alt="home"></a>
+             <img src="{% static 'img/line.png' %}" alt="line">
+             <a href="{% url 'main:index' %}">Asosiy</a>
+             <img src="{% static 'img/line.png' %}" alt="line">
+             <a href="{% url 'main:qurilma' %}">Qurilmalar</a>
+             
+         </div>
+
+         {% if request.user.is_superuser %}
+         <a href="{% url 'main:users' %}" class="box-user">
+             <img src="{% static 'img/user.svg' %}" alt="user">
+             <span>|</span>
+             <p>{{ user.full_name }}</p>
+         </a>
+         {% else %}
+         <a href="#" class="box-user">
+            <img src="{% static 'img/user.svg' %}" alt="user">
+            <span>|</span>
+            <p>{{ user.full_name }}</p>
+        </a>
+         {% endif %}
+    </div>
+</nav>
+{% endblock navbar-top %}
+
+{% block content %}
+<section class="article">
+    <div class="form-container">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="{{ form.name.id_for_label }}" class="form-label">Foydalanuvchi Ismi</label>
+                {{ user_device_form.name }}
+            </div>
+        
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <img class="arrow" src="{% static 'img/arrow-right.png' %}">
+                    <label for="{{ form.categoryRegion.id_for_label }}">Viloyat</label>
+                    {{ user_device_form.categoryRegion }}
+                </div>
+                <div class="col-md-6">
+                    <img class="arrow" src="{% static 'img/arrow-right.png' %}">
+                    <label for="{{ form.categoryDistrict.id_for_label }}">Tuman</label>
+                    {{ user_device_form.categoryDistrict }}
+                </div>
+            </div>
+        
+            <div class="mb-3">
+                <label for="{{ form.device_type.id_for_label }}">Qurilma Turi</label>
+                {{ user_device_form.device_type }}
+            </div>
+        
+            <div class="mb-3">
+                <label for="{{ form.device_name.id_for_label }}">Qurilma Nomi</label>
+                {{ user_device_form.device_name }}
+            </div>
+
+
+            <div class="row g-3">
+                <div class="mb-3 col-md-6">
+                    <label for="{{ form.data.id_for_label }}">Yo‘qolgan Vaqti</label>
+                    {{ user_device_form.data }}
+                </div>
+            
+                <div class="mb-3 col-md-6">
+                    <label for="{{ form.phone_number.id_for_label }}">Telefon Raqami</label>
+                    {{ user_device_form.phone_number }}
+                </div>
+            </div>    
+            
+            
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        {{ user_device_form.imei_formset.management_form }}
+                        <table class="mb-3" id="imei_table">
+                            {% for form in user_device_form.imei_formset %}
+                                <tr class="imei-row mb-3">
+                                    <td class='td1'>
+                                        <label for="{{ form.imei.id_for_label }}">IMEI 1:</label>
+                                        {{ form.imei }}
+                                    </td>
+                                    <td><a href="#" class="delete-form btn btn-danger">&times;</a></td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                        
+                    
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" id="add_imei" class="btn mb-3">IMEI qo'shish</button>
+                    </div>
+                </div>
+
+     
+        
+            
+
+
+                <div class="col-md-12">
+                    <label for="{{ form.file.id_for_label }}">Ariza Fayli</label>
+                    {{ user_device_form.file }}
+                </div>
+            </div>
+            <div class="form-check">
+                <button type="submit"><img src="{% static 'img/check.svg' %}" alt="chack"><span>|</span>
+                    Yuborish
+                </button>
+            </div>
+
+        
+        </form>
+    </div>
+</section>
+{% endblock content %}
+
+{% block js %}
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log("JavaScript yuklandi!");
+
+        // Viloyatni o'zgartirganda tumanlarni yangilash
+        const regionSelect = document.getElementById('id_categoryRegion');
+        const districtSelect = document.getElementById('districtSelect');
+
+        if (regionSelect) {
+            console.log("Viloyat select elementi mavjud.");
+            regionSelect.addEventListener('change', function () {
+                const regionId = this.value; // Viloyatning ID-si
+
+                // Tumanlarni tozalash
+                districtSelect.innerHTML = '<option value="">Tuman tanlang</option>';
+
+                if (regionId) {
+                    console.log("Viloyat tanlandi, AJAX so'rov yuboriladi");
+                    // AJAX so'rov yuborish
+                    fetch(`/get_districts/${regionId}/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.districts.forEach(district => {
+                                const option = document.createElement('option');
+                                option.value = district.id;
+                                option.textContent = district.title;
+                                districtSelect.appendChild(option); // Yangi tumanlarni qo'shish
+                            });
+                        })
+                        .catch(error => console.error('Tumanlarni yuklashda xatolik:', error));
+                }
+            });
+        }
+
+        // IMEI form qo'shish
+        const addImeiButton = document.getElementById('add_imei');
+        const formsetTable = document.getElementById('imei_table');
+        const totalForms = document.getElementById('id_imeis-TOTAL_FORMS');
+
+        if (addImeiButton) {
+            console.log("IMEI qo'shish tugmasi mavjud.");
+            addImeiButton.addEventListener('click', function () {
+                const formCount = parseInt(totalForms.value); // Joriy formalar soni
+                console.log(`Joriy formalar soni: ${formCount}`);
+        
+                // Yangi qator yaratish
+                const newRow = document.createElement('tr');
+                newRow.className = 'imei-row mb-2';
+        
+                // IMEI input maydoni
+                const imeiCell = document.createElement('td');
+                
+                // IMEI label
+                const imeilabel = document.createElement('label');
+                imeilabel.htmlFor = `imei_form-${formCount}-imei`;
+                imeilabel.textContent = `IMEI1 ${formCount + 1}:`; // IMEI raqamini qo'shish
+                imeiCell.appendChild(imeilabel);
+        
+                const imeiInput = document.createElement('input');
+                imeiInput.type = 'text';
+                imeiInput.name = `imei_form-${formCount}-imei`;
+                imeiInput.id = `imei_form-${formCount}-imei`;
+                imeiInput.className = 'form-control';
+                imeiInput.required = true;
+                imeiCell.appendChild(imeiInput);
+        
+                // O'chirish tugmasi
+                const deleteCell = document.createElement('td');
+                const deleteButton = document.createElement('a');
+                deleteButton.href = '#';
+                deleteButton.className = 'delete-form btn btn-danger';
+                deleteButton.innerHTML = '&times;';
+                deleteCell.appendChild(deleteButton);
+        
+                // Yangi qatorni jadvalga qo'shish
+                newRow.appendChild(imeiCell);
+                newRow.appendChild(deleteCell);
+                formsetTable.appendChild(newRow);
+        
+                // Formlar sonini yangilash
+                totalForms.value = formCount + 1;
+            });
+        }
+
+        // IMEI form o'chirish
+        document.addEventListener('click', function (e) {
+            if (e.target.closest('.delete-form')) {
+                e.preventDefault();
+
+                const row = e.target.closest('.imei-row'); // Qatorni aniqlash
+                if (row) {
+                    row.remove(); // Qatorni o'chirish
+
+                    // Formlar sonini yangilash
+                    totalForms.value = parseInt(totalForms.value, 10) - 1;
+                }
+            }
+        });
+    });
+
+{% endblock js %}

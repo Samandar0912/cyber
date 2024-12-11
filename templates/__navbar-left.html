@@ -1,0 +1,25 @@
+{% load static %}
+
+<nav class="navbar-left">  
+    <div class="clock">
+        <p class="date">{{ times|date:"d-m-Y"}}</p>
+        <p class="time" id="time">{{ times|date:"H:i:s" }}</p>
+        <img class="close" src="{% static 'img/close.png' %}" alt="">
+
+    </div>
+    <ul class="navbar-left-ul-1">
+        <li><a href="{% url 'main:index' %}"><img src="{% static 'img/home.svg' %}" alt="home"><span>|</span><p>Asosiy</p></a></li>
+        <li><a href="{% url 'main:qurilma' %}"><img src="{% static 'img/tablet.svg' %}" alt="home"><span>|</span><p>Qurilmalar</p></a></li>
+        <li><a href="{% url 'main:table' %}"><img src="{% static 'img/table.svg' %}" alt="home"><span>|</span><p>Ro'yxatlar</p></a></li>
+        <li><a href="{% url 'main:statistika' %}"><img src="{% static 'img/diagram.svg' %}" alt="home"><span>|</span><p>Statistika</p></a></li>
+        {% if request.user.is_superuser %}
+        <li><a href="{% url 'main:founds' %}"><img src="{% static 'img/check.svg' %}" alt="chack"><span>|</span><p>Topilganlar</p></a></li>
+        <li><a href="{% url 'main:users' %}"><img src="{% static 'img/user.svg' %}" alt="home"><span>|</span><p>Xodimlar</p></a></li>
+        <li><a href="{% url 'main:setting' %}"><img src="{% static 'img/laptop.svg' %}" alt="home"><span>|</span><p>Qurilma kiritish</p></a></li>
+        
+        {% endif %}
+    </ul>
+    <ul class="logout-ul">
+        <li><a href="{% url 'main:logout' %}"><img src="{% static 'img/logout.svg' %}" alt="home"><span>|</span><p>Chiqish</p></a></li>
+    </ul>
+</nav>

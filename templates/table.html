@@ -1,0 +1,97 @@
+{% extends "__base.html" %}
+{% load static %}
+{% block navbar-top %}
+<nav class="navbar-top">
+    <img src="{% static 'img/menu-bar.png' %}" class="menu" alt="menu">
+    <div class="nav-center">
+        <div class="toogle">
+            <a href="{% url 'main:index' %}"><img src="{% static 'img/home.svg' %}" alt="home"></a>
+            <img src="{% static 'img/line.png' %}" alt="line">
+            <a href="{% url 'main:index' %}">Asosiy</a>
+            <img src="{% static 'img/line.png' %}" alt="line">
+            <a href="{% url 'main:table' %}">Ro'yxatlar</a>
+        </div>
+
+        {% if request.user.is_superuser %}
+        <a href="{% url 'main:users' %}" class="box-user">
+            <img src="{% static 'img/user.svg' %}" alt="user">
+            <span>|</span>
+            <p>{{ user.full_name }}</p>
+        </a>
+        {% else %}
+        <a href="#" class="box-user">
+            <img src="{% static 'img/user.svg' %}" alt="user">
+            <span>|</span>
+            <p>{{ user.full_name }}</p>
+        </a>
+        {% endif %}
+    </div>
+</nav>
+{% endblock navbar-top %}
+
+{% block content %}
+<section class="article">
+    <div class="form-container">
+        <!-- Search Form -->
+        <form class="d-flex" role="search" method='get'>
+            <input class="form-control search-input" type="search" placeholder="Qurilmani qidiring" value="{{ request.GET.search }}" aria-label="Search">
+            <button class="btn btn-outline-primary search-btn" type="submit">Search</button>
+        </form>
+
+        <!-- Device List Table -->
+        <table class="table table-hover mt-4">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Ism</th>
+                    <th>Tuman</th>
+                    <th>Qurilma</th>
+                    <th>Qurilma Nomi</th>
+                    <th>IMEI</th>
+                    <th>Yo‘qolgan Vaqti</th>
+                    <th>Tell Raqami</th>
+                    <th>Ariza Fayli</th>
+                    <th>O'chirish</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for devise in user_devices %}
+                <tr>
+                    <td>{{ devise.id }}</td>
+                    {% if user.is_superuser %}
+                    <td><a href="{% url 'main:update_qurilma' devise.id %}" class="link-a">{{ devise.name }}</a></td>
+                    {% else %}
+                    <td><a href="#" class="link-a">{{ devise.name }}</a></td>
+                    {% endif %}
+                    <td>{{ devise.categoryDistrict }}</td>
+                    <td>{{ devise.device_type }}</td>
+                    <td>{{ devise.device_name }}</td>
+                    <td>{{ devise.get_imeis }}</td>
+                    <td>{{ devise.data|date:"d-m-Y H:i" }}</td>
+                    <td>{{ devise.phone_number }}</td>     
+                    <td>
+                        {% if devise.file %}
+                        <a href="{{ devise.file.url }}" class="link-b" target="_blank">Fayl</a>
+                        {% else %}
+                        <span>Fayl mavjud emas</span>
+                        {% endif %}
+                    </td>
+                    <td><a href="{% url 'main:delete_table' devise.id %}" class="btn red btn-outline-danger" onclick="return confirm('Haqiqatan ham o‘chirmoqchimisiz?')">O'chirish</a></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="10" class="text-center">Hech qanday ma'lumot topilmadi.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Excel Export Button -->
+        {% if user.is_superuser %}
+        <div class="btn-box">
+            <a href="?export_excel=true" class="btn1">Excelga yuklash</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock content %}

@@ -1,0 +1,45 @@
+{% extends "__base.html" %}
+{% load static %}
+{% block navbar-top %}
+<nav class="navbar-top">
+    <img src="{% static 'img/menu-bar.png' %}" class="menu" alt="menu">
+    <div class="nav-center">
+         <div class="toogle">
+             <a href="{% url 'main:index' %}"><img src="{% static 'img/home.svg' %}" alt="home"></a>
+             <img src="{% static 'img/line.png' %}" alt="line">
+             <a href="{% url 'main:index' %}">Asosiy</a>
+             <img src="{% static 'img/line.png' %}" alt="line">
+             <a href="{% url 'main:setting' %}">Qurilma kiritish</a>
+
+             
+         </div>
+         {% if request.user.is_superuser %}
+         <a href="{% url 'main:users' %}" class="box-user">
+             <img src="{% static 'img/user.svg' %}" alt="user">
+             <span>|</span>
+             <p>{{ user.full_name }}</p>
+         </a>
+         {% else %}
+         <a href="#" class="box-user">
+            <img src="{% static 'img/user.svg' %}" alt="user">
+            <span>|</span>
+            <p>{{ user.full_name }}</p>
+        </a>
+         {% endif %}
+    </div>
+</nav>
+{% endblock navbar-top %}
+{% block content %}
+
+
+    <h2>Foydalanuvchi Eslatmani Tahrirlash</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-outline-success mt-3 green">Yangilash</button>
+        <a href="{% url 'main:index' %}" class="btn btn-outline-secondary greey mt-3">Bekor qilish</a>
+    </form>
+
+
+{% endblock content %}
+

@@ -1,0 +1,91 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.login{
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.7)), url(../img/4.jpg);
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    display: flex;
+}
+
+.row{
+    display: flex;
+    width: 100%;
+}
+
+.row .empty{
+    width: 50% !important;
+    height: 100vh;
+}
+
+.row .login-box{
+    width: 50%;
+    background: #0d1725c5;
+    color: #fff;
+}
+
+
+form{   
+    margin: auto;
+    margin-top: 200px;
+    display: flex;
+    flex-direction: column;  
+    width: 500px !important;
+
+}
+form h1{
+    text-align: center;  
+    font-size: 44px;
+    font-weight: 600;   
+}
+
+.box-input{
+    min-width: 500px;
+    display: inline-block ;
+    margin: 15px 0px;
+    border: 2px solid #061426;
+    background: #0B1C34;
+    border-bottom-right-radius: 15px;
+    padding: 10px;
+}
+.box-input input{
+    outline: none;
+    border: none;
+    color: #fff;
+    background: none;
+    width: 420px;
+    padding: 3px;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+
+.box-input input::placeholder{color: #fff;}
+
+.box-input span, form > div > button > span{color: #005198;font-weight: 700;}
+
+form > div > button{
+    margin:10px auto;
+    padding: 10px;
+    font-size: 18px;
+    text-align: left;
+    display: block !important;
+    width: 250px;
+    border: 2px solid #061426;
+    background: #0B1C34;
+    border-bottom-right-radius: 10px;
+    color: #fff;
+    transition: all .2s;
+}
+
+form > div > button:hover{
+    transition: all .2s;
+    background: #09203d;
+    border: 2px solid #005198;
+    box-shadow: 0 0 15px #005198;
+}
